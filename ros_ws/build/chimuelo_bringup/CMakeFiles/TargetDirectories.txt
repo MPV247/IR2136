@@ -1,0 +1,9 @@
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/uninstall.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/chimuelo_bringup_uninstall.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/test.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/edit_cache.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/rebuild_cache.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/list_install_components.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/install.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/install/local.dir
+/home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup/CMakeFiles/install/strip.dir

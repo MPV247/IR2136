@@ -1,0 +1,45 @@
+-- Found ament_cmake: 1.3.10 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found rclcpp: 16.0.10 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found geometry_msgs: 4.2.4 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found mavros_msgs: 2.14.0 (/opt/ros/humble/share/mavros_msgs/cmake)
+-- Found tf2_ros: 0.25.7 (/opt/ros/humble/share/tf2_ros/cmake)
+-- Found robot_localization: 3.5.4 (/opt/ros/humble/share/robot_localization/cmake)
+-- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/miguel/Documents/GitHub/IR2136/ros_ws/build/chimuelo_bringup
+-- Install configuration: ""
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/config
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/launch
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/launch/display.launch.py
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/urdf
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/urdf/chimuelo.step
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/urdf/prueba_chimuelo.urdf
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/rviz
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/ament_index/resource_index/package_run_dependencies/chimuelo_bringup
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/ament_index/resource_index/parent_prefix_path/chimuelo_bringup
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/environment/ament_prefix_path.sh
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/environment/ament_prefix_path.dsv
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/environment/path.sh
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/environment/path.dsv
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/local_setup.bash
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/local_setup.sh
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/local_setup.zsh
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/local_setup.dsv
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/package.dsv
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/ament_index/resource_index/packages/chimuelo_bringup
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/cmake/chimuelo_bringupConfig.cmake
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/cmake/chimuelo_bringupConfig-version.cmake
+-- Installing: /home/miguel/Documents/GitHub/IR2136/ros_ws/install/chimuelo_bringup/share/chimuelo_bringup/package.xml
