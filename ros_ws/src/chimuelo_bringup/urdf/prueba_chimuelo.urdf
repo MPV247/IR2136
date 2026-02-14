@@ -31,6 +31,15 @@
     </collision>
   </link>
 
+  <!-- Tren de aterrizaje -->
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>     
+     <child link="base_footprint"/>  
+     <origin xyz="0 0 -0.26" rpy="0 0 0"/> 
+  </joint>
+
   <!-- Frame de la cámara -->
   <link name="camera_link">
     <visual>
