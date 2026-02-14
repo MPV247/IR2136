@@ -11,6 +11,7 @@
     <color rgba="0.2 0.2 0.2 1"/>
   </material>
 
+  <!-- Frame de la controladora de vuelo-->
   <link name="base_link">
     <visual>
       <origin xyz="0.222 -0.038 0.065" rpy="0 0 1.5708"/>
@@ -30,9 +31,10 @@
     </collision>
   </link>
 
+  <!-- Frame de la cámara -->
   <link name="camera_link">
     <visual>
-      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <box size="0.025 0.09 0.025"/>
       </geometry>
@@ -47,10 +49,11 @@
     </visual>
   </link>
 
+  <!-- TFs -->
   <joint name="drone_camera_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin xyz="0.15 0.0 -0.04" rpy="0 0 0"/>
+    <origin xyz="0.15 0.0 -0.04" rpy="0 0.24 0"/>
   </joint>
 
 </robot>
