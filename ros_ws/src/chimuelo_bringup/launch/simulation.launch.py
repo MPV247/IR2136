@@ -11,7 +11,7 @@ def generate_launch_description():
 
     # RUTAS
     urdf_file = os.path.join(pkg_chimuelo, 'urdf', 'prueba_chimuelo.urdf')
-    ekf_config_file = os.path.join(pkg_chimuelo, 'config', 'ekf_params_simple.yaml')
+    ekf_config_file = os.path.join(pkg_chimuelo, 'config', 'ekf_params_sim.yaml')
 
     # LEER URDF
     with open(urdf_file, 'r') as infp:
@@ -22,18 +22,19 @@ def generate_launch_description():
     # ====================================================
     # En simulación, PX4 habla por el puerto UDP 14540
     mavros_node = Node(
-        package='mavros',
-        executable='mavros_node',
-        output='screen',
-        parameters=[{
-            'fcu_url': 'udp://:14540@127.0.0.1:14557',
-            'gcs_url': '',
-            'target_system_id': 1,
-            'target_component_id': 1,
-            'fcu_protocol': 'v2.0',
-            'use_sim_time': True  # <--- VITAL EN SIMULACIÓN
-        }]
-    )
+    package='mavros',
+    executable='mavros_node',
+    output='screen',
+    parameters=[{
+        'fcu_url': 'udp://:14540@127.0.0.1:14540', # O simplemente 'udp://:14540@'
+        'gcs_url': '',
+        'target_system_id': 1,
+        'target_component_id': 1,
+        'fcu_protocol': 'v2.0',
+        'timesync_rate': 0.0,
+        'use_sim_time': True
+    }]
+)
 
     # ====================================================
     # 2. STATE PUBLISHER (Tu URDF)
