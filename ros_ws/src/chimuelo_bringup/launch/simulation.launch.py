@@ -7,8 +7,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     pkg_chimuelo = get_package_share_directory('chimuelo_bringup')
-    pkg_mavros = get_package_share_directory('mavros')
-
+    
     # RUTAS
     urdf_file = os.path.join(pkg_chimuelo, 'urdf', 'prueba_chimuelo.urdf')
     ekf_config_file = os.path.join(pkg_chimuelo, 'config', 'ekf_params_sim.yaml')
@@ -18,44 +17,54 @@ def generate_launch_description():
         robot_desc = infp.read()
 
     # ====================================================
-    # 1. MAVROS (Conexión UDP con SITL)
+    # 1. GAZEBO BRIDGE (Vital para ver y para el tiempo)
     # ====================================================
-    # En simulación, PX4 habla por el puerto UDP 14540
-    mavros_node = Node(
-    package='mavros',
-    executable='mavros_node',
-    output='screen',
-    parameters=[{
-        'fcu_url': 'udp://:14540@127.0.0.1:14540', # O simplemente 'udp://:14540@'
-        'gcs_url': '',
-        'target_system_id': 1,
-        'target_component_id': 1,
-        'fcu_protocol': 'v2.0',
-        'timesync_rate': 0.0,
-        'use_sim_time': True
-    }]
-)
+    # Incluimos /clock para sincronizar tiempos y las cámaras
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '/camera/rgb/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/depth/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/rgb/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            '/camera/depth/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'  # <--- CRÍTICO
+        ],
+        output='screen'
+    )
 
     # ====================================================
-    # 2. STATE PUBLISHER (Tu URDF)
+    # 2. MAVROS
     # ====================================================
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
+    mavros_node = Node(
+        package='mavros',
+        executable='mavros_node',
         output='screen',
         parameters=[{
-            'robot_description': robot_desc, 
-            'use_sim_time': True # <--- VITAL
+            'fcu_url': 'udp://:14540@127.0.0.1:14540',
+            'gcs_url': '',
+            'target_system_id': 1,
+            'target_component_id': 1,
+            'fcu_protocol': 'v2.0',
+            'timesync_rate': 0.0, # Silencia el error de RTT
+            'use_sim_time': True
         }]
     )
 
     # ====================================================
-    # 3. STATIC TRANSFORMS (Parches para Simulación)
+    # 3. STATE PUBLISHER
     # ====================================================
-    # A veces la cámara en Gazebo tiene nombres de frame distintos.
-    # Esto une tu URDF (camera_link) con la cámara de Gazebo (camera_link_optical)
-    # Si ves que la nube de puntos apunta mal, ajusta estos números.
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[{'robot_description': robot_desc, 'use_sim_time': True}]
+    )
+
+    # ====================================================
+    # 4. STATIC TF (Ajuste Cámara)
+    # ====================================================
+    # Une la cámara del URDF con la óptica de Gazebo
     tf_camera_sim = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -63,19 +72,19 @@ def generate_launch_description():
     )
 
     # ====================================================
-    # 4. EKF (Tu configuración)
+    # 5. EKF
     # ====================================================
     ekf_node = Node(
         package='robot_localization',
         executable='ekf_node',
         name='ekf_filter_node',
         output='screen',
-        parameters=[ekf_config_file, {'use_sim_time': True}], # <--- VITAL
+        parameters=[ekf_config_file, {'use_sim_time': True}],
         remappings=[('odometry/filtered', '/odometry/filtered')]
     )
 
     # ====================================================
-    # 5. RTAB-MAP ODOMETRY
+    # 6. RTAB-MAP ODOMETRY (CORREGIDO)
     # ====================================================
     rtabmap_odom = Node(
         package='rtabmap_odom',
@@ -84,12 +93,15 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'frame_id': 'base_link',
-            'publish_tf': False,
+            'publish_tf': False, # EKF se encarga de publicar odom->base_link
             'wait_imu_to_init': False,
-            'use_sim_time': True # <--- VITAL
+            'use_sim_time': True,
+            'qos': 2,               # <--- SOLUCIÓN: Acepta "Best Effort" de Gazebo
+            'qos_camera_info': 2,   # <--- SOLUCIÓN: También para la info de cámara
+            'approx_sync': True,
+            'queue_size': 10
         }],
         remappings=[
-            # Mapeamos los tópicos que escupe Gazebo a los que espera RTAB
             ('rgb/image', '/camera/rgb/image_raw'),
             ('depth/image', '/camera/depth/image_raw'),
             ('rgb/camera_info', '/camera/rgb/camera_info'),
@@ -98,7 +110,7 @@ def generate_launch_description():
     )
 
     # ====================================================
-    # 6. RVIZ
+    # 7. RVIZ
     # ====================================================
     rviz_node = Node(
         package='rviz2',
@@ -108,6 +120,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        bridge,
         mavros_node,
         robot_state_publisher,
         tf_camera_sim,
