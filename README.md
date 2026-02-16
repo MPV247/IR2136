@@ -53,3 +53,13 @@ Bash
 
 sudo apt install -y geographiclib-tools libgeographic-dev
 sudo geographiclib-get-geoids egm96-5
+
+
+SITL - PX4: Repo para clonar la conrtroladora de vuelo y tener Gazebo. 
+git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+cd PX4-Autopilot/
+
+#Lanza mundo de gazebo con dron
+PX4_GZ_WORLD=default make px4_sitl gz_x500_depth
+
+
