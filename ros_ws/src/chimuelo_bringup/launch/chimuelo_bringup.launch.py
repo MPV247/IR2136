@@ -9,7 +9,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # 1. LOCALIZAR DIRECTORIOS
     pkg_chimuelo = get_package_share_directory('chimuelo_bringup')
-    pkg_realsense = get_package_share_directory('realsense2_camera')
+    pkg_realsense = get_package_share_directory('realsense2_camera') #TODO ¿Es este el paquete David?
 
     # 2. RUTAS DE ARCHIVOS
     urdf_file = os.path.join(pkg_chimuelo, 'urdf', 'prueba_chimuelo.urdf')
@@ -45,7 +45,7 @@ def generate_launch_description():
         }.items()
     )
 
-    # C. ODOMETRÍA VISUAL (RTAB-MAP RGBD)
+    # C. ODOMETRÍA VISUAL (RTAB-MAP RGBD) TODO 
     rtabmap_odom_node = Node(
         package='rtabmap_odom',
         executable='rgbd_odometry',
