@@ -1,75 +1,76 @@
 ### Configuración del EKF para Holybro X500 + Pixhawk + RealSense D435 ###
 
-# TODO --> Estudiar los parámetros de configuración. (Están en el TFM).
-frequency: 30
-sensor_timeout: 0.1
-two_d_mode: false
-transform_time_offset: 0.05
-smooth_lagged_data: true
-history_length: 1.0
+ekf_filter_node:
+  ros__parameters:
+    frequency: 30
+    sensor_timeout: 0.1
+    two_d_mode: false
+    transform_time_offset: 0.05
+    smooth_lagged_data: true
+    history_length: 1.0
 
-# Marcos de referencia (Frames)
-map_frame: map              # Global (GPS o mapa fijo)
-odom_frame: odom            # Local (donde arrancó el dron, suave y continuo)
-base_link_frame: base_link  # El robot
-world_frame: odom           # Para empezar, usa 'odom' como mundo.
+    # Marcos de referencia (Frames)
+    map_frame: map              # Global (GPS o mapa fijo)
+    odom_frame: odom            # Local (donde arrancó el dron, suave y continuo)
+    base_link_frame: base_link  # El robot
+    world_frame: odom           # Para empezar, usa 'odom' como mundo.
 
-# Publicar la transformación TF entre odom -> base_link
-publish_tf: true
+    # Publicar la transformación TF entre odom -> base_link
+    publish_tf: true
 
-# ---------------------------------------------------------
-# INPUT 1: IMU DE LA PIXHAWK (Vía MAVROS)
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # INPUT 1: IMU DE LA PIXHAWK (Vía MAVROS)
+    # ---------------------------------------------------------
 
-imu0: /mavros/imu/data
-imu0_config: [false, false, false,  # X, Y, Z
-              true,  true,  true,   # Roll, Pitch, Yaw
-              false, false, false,  # Velocidad lineal
-              true,  true,  true,   # Velocidad angular
-              false, false, false]  # Aceleración
+    imu0: /mavros/imu/data
+    imu0_config: [false, false, false,  # X, Y, Z
+                  true,  true,  true,   # Roll, Pitch, Yaw
+                  false, false, false,  # Velocidad lineal
+                  true,  true,  true,   # Velocidad angular
+                  false, false, false]  # Aceleración
 
-# Usamos la IMU en modo diferencial para que coincida con el inicio de la cámara
-imu0_differential: false
-imu0_relative: true
-imu0_queue_size: 10
-imu0_remove_gravitational_acceleration: true
+    # Usamos la IMU en modo diferencial para que coincida con el inicio de la cámara
+    imu0_differential: false
+    imu0_relative: true
+    imu0_queue_size: 10
+    imu0_remove_gravitational_acceleration: true
 
 
-# ---------------------------------------------------------
-# INPUT 2: ODOMETRÍA VISUAL (De tu SLAM/RTAB-Map/VINS)
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # INPUT 2: ODOMETRÍA VISUAL (De tu SLAM/RTAB-Map/VINS)
+    # ---------------------------------------------------------
 
-odom0: /rtabmap/odom
-odom0_config: [true,  true,  true,   # X, Y, Z
-               false, false, false,  # Roll, Pitch, Yaw
-               false, false, false,  # Velocidad lineal
-               false, false, false,  # Velocidad angular
-               false, false, false]  # Aceleración
+    odom0: /rtabmap/odom
+    odom0_config: [true,  true,  true,   # X, Y, Z
+                  false, false, false,  # Roll, Pitch, Yaw
+                  false, false, false,  # Velocidad lineal
+                  false, false, false,  # Velocidad angular
+                  false, false, false]  # Aceleración
 
-odom0_differential: false
-odom0_relative: false
-odom0_queue_size: 10
+    odom0_differential: false
+    odom0_relative: false
+    odom0_queue_size: 10
 
-# ---------------------------------------------------------
-# MATRICES DE COVARIANZA
-# ---------------------------------------------------------.
-# Valores pequeños = Confío mucho. Valores grandes = No confío.
+    # ---------------------------------------------------------
+    # MATRICES DE COVARIANZA
+    # ---------------------------------------------------------.
+    # Valores pequeños = Confío mucho. Valores grandes = No confío.
 
-# Matriz de ruido del proceso (Ajuste estándar para drones aéreos)
+    # Matriz de ruido del proceso (Ajuste estándar para drones aéreos)
 
-#                            X   Y     Z     R     P     Y     X'     Y'     Z'    wx    xy    wz   X''   Y''   Z''
-process_noise_covariance: [0.05, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0.05, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0.06, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0.06, 0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0.025, 0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0.025, 0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0.02, 0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0.01, 0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0.01, 0,
-                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0.015]
+    #                            X   Y     Z     R     P     Y     X'     Y'     Z'    wx    xy    wz   X''   Y''   Z''
+    process_noise_covariance: [0.05, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0.05, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0.06, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0.06, 0,     0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0.025, 0,     0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0.025, 0,    0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0.02, 0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0.01, 0,    0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0.01, 0,
+                              0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0.015]
