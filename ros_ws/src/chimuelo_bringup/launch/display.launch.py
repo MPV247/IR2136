@@ -20,12 +20,6 @@ def generate_launch_description():
             output='screen',
             parameters=[{'robot_description': robot_desc}]
         ),
-        # 2. Nodo opcional para manejar las articulaciones (Joints)
-        Node(
-            package='joint_state_publisher',
-            executable='joint_state_publisher',
-            name='joint_state_publisher'
-        ),
         # 3. Lanzar RViz2
         Node(
             package='rviz2',
