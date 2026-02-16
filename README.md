@@ -2,7 +2,7 @@
 
 Paquete de inicio y configuración para la simulación del dron "Chimuelo" utilizando PX4 Autopilot (SITL), Gazebo Sim y ROS 2 Humble.
 
-Este paquete orquesta la conexión entre:
+Este paquete orquesta la conexión entre: 
 
     MAVROS: Para comunicación MAVLink (Comandos de vuelo, IMU, GPS).
 
