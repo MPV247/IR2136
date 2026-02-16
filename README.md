@@ -64,6 +64,6 @@ cd PX4-Autopilot/
 
 #Lanza mundo de gazebo con dron
 PX4_GZ_WORLD=default make px4_sitl gz_x500_depth
-```bash
+```
 
 
