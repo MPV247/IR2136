@@ -4,90 +4,79 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch.conditions import IfCondition
 
 def generate_launch_description():
-    # 1. LOCALIZAR DIRECTORIOS
     pkg_chimuelo = get_package_share_directory('chimuelo_bringup')
-    pkg_realsense = get_package_share_directory('realsense2_camera') #TODO ¿Es este el paquete David?
+    pkg_realsense = get_package_share_directory('realsense2_camera')
+    pkg_rtabmap_launch = get_package_share_directory('rtabmap_launch')
 
-    # 2. RUTAS DE ARCHIVOS
-    urdf_file = os.path.join(pkg_chimuelo, 'urdf', 'prueba_chimuelo.urdf')
-    ekf_config_file = os.path.join(pkg_chimuelo, 'config', 'ekf_params_simple.yaml')
+    # --- 1. ARGUMENTOS DE CONTROL (FLAGS) ---
+    # Permiten al usuario decidir qué activar desde la terminal
+    args = [
+        DeclareLaunchArgument('enable_description', default_value='true', description='Activar robot_state_publisher'),
+        DeclareLaunchArgument('enable_realsense', default_value='true', description='Activar RealSense'),
+        DeclareLaunchArgument('enable_mapping', default_value='true', description='Activar RTAB-Map'),
+        DeclareLaunchArgument('enable_rviz', default_value='true', description='Abrir RViz'),
+    ]
 
-    # 3. LEER EL URDF (Necesario para robot_state_publisher)
-    with open(urdf_file, 'r') as infp:
-        robot_desc = infp.read()
-
-    # ========================================================================
-    # DEFINICIÓN DE NODOS
-    # ========================================================================
-
-    # A. PUBLICAR EL ROBOT (URDF)S
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='screen',
-        parameters=[{'robot_description': robot_desc}],
-        arguments=[urdf_file]
+    # --- 2. INCLUIR LOS SUB-LAUNCHES CON CONDICIONES ---
+   
+    # A. Descripción (URDF)
+    description_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_chimuelo, 'launch', 'transformadas.launch.py')),
+        condition=IfCondition(LaunchConfiguration('enable_description'))
     )
 
-    # B. CÁMARA REALSENSE
-    # TODO --> Preguntarle a David el launch que utiliza el.
-    realsense_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_realsense, 'launch', 'rs_launch.py')
-        ),
+    # B. Sensores (Cámara)
+    
+
+    # C. Localización (Odom + EKF)
+    localization_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_rtabmap_launch, 'launch', 'rtabmap.launch.py')),
+        condition=IfCondition(LaunchConfiguration('enable_mapping')),
         launch_arguments={
-            'align_depth.enable': 'true',  # Sintaxis ROS2 para realsense
-            'pointcloud.enable': 'true',
+            'frame_id': 'base_link',          # Robot
+            'args': '--delete_db_on_start', 
+
+            'approx_sync': 'false',              # Realsense --> Sincronización suave
+
+            # --- AJUSTES DE RENDIMIENTO (TFM) ---
+            # Si la Jetson se ahoga, baja esto a 1.0 o 0.5 Hz
+            #'Rtabmap/DetectionRate': '2.0',
+
+
+            # --- MEMORIA ---
+            # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
+            #'Mem/IncrementalMemory': 'true',
+            #'Mem/InitWMWithAllNodes': 'true',
+            'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
+            'rgb_topic' : '/camera/camera/color/image_raw',
+            'camera_info_topic' : '/camera/camera/color/camera_info'
+            
         }.items()
     )
 
-    # C. ODOMETRÍA VISUAL (RTAB-MAP RGBD) TODO 
-    rtabmap_odom_node = Node(
-        package='rtabmap_odom',
-        executable='rgbd_odometry',
-        name='rgbd_odometry',
-        output='screen',
-        parameters=[{
-            'frame_id': 'base_link',
-            'publish_tf': False,       # Ya lo hace EKF
-            'wait_imu_to_init': False
-        }],
-        remappings=[
-            ('rgb/image', '/camera/camera/color/image_raw'),
-            ('depth/image', '/camera/camera/aligned_depth_to_color/image_raw'),
-            ('rgb/camera_info', '/camera/camera/color/camera_info'),
-            ('odom', '/rtabmap/odom') # Salida de odometría
-        ]
+    # D. Visualización
+    visualization_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_chimuelo, 'launch', 'display.launch.py')),
+        condition=IfCondition(LaunchConfiguration('enable_rviz'))
     )
-
-    # D. FUSIÓN DE SENSORES (EKF - ROBOT LOCALIZATION)
-    ekf_node = Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        output='screen',
-        parameters=[ekf_config_file], # Carga el YAML corregido
-        remappings=[('odometry/filtered', '/odometry/filtered')]
+    
+    sensors_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_realsense, 'launch', 'rs_launch.py')),
+        condition=IfCondition(LaunchConfiguration('enable_realsense')),
+        launch_arguments={
+            'align_depth.enable': 'true',  # Alinea el mapa de profundidad al frame de color
+            'pointcloud.enable': 'true',   # Habilita la publicación de PointCloud2
+        }.items()
     )
+    
+    # Construir la lista final
+    ld = LaunchDescription(args)
+    ld.add_action(description_launch)
+    ld.add_action(sensors_launch)
+    ld.add_action(localization_launch)
+    ld.add_action(visualization_launch)
 
-    # E. VISUALIZACIÓN (RVIZ2)
-    rviz_config = os.path.join(pkg_chimuelo, 'rviz', 'chimuelo.rviz')
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        arguments=['-d', rviz_config]
-    )
-
-    # Descripcion
-    return LaunchDescription([
-        robot_state_publisher_node,
-        realsense_launch,
-        rtabmap_odom_node,
-        ekf_node,
-        rviz_node
-    ])
+    return ld

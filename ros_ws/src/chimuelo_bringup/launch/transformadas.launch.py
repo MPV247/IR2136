@@ -6,18 +6,17 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_dir = get_package_share_directory('chimuelo_bringup')
     urdf_file = os.path.join(pkg_dir, 'urdf', 'prueba_chimuelo.urdf')
-    rviz_config_file = os.path.join(pkg_dir, 'rviz', 'rtabmap-rviz.rviz')
 
     with open(urdf_file, 'r') as infp:
         robot_desc = infp.read()
 
     return LaunchDescription([
-        # 1. Lanzar RViz2
+        # 1. Publicador de estado del robot (Lee el URDF y genera los TFs)
         Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
             output='screen',
-            arguments=['-d', rviz_config_file]
+            parameters=[{'robot_description': robot_desc}]
         )
     ])
