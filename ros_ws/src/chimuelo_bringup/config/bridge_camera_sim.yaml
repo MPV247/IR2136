@@ -1,0 +1,20 @@
+# config/bridge_camera_sim.yaml
+- topic_name: /world/default/clock
+  ros_type_name: rosgraph_msgs/msg/Clock
+  gz_type_name: gz.msgs.Clock
+
+- topic_name: /world/default/model/x500_depth_0/link/camera_link/sensor/IMX214/image
+  ros_type_name: sensor_msgs/msg/Image
+  gz_type_name: gz.msgs.Image
+
+- topic_name: /world/default/model/x500_depth_0/link/camera_link/sensor/IMX214/camera_info
+  ros_type_name: sensor_msgs/msg/CameraInfo
+  gz_type_name: gz.msgs.CameraInfo
+
+- topic_name: /depth_camera
+  ros_type_name: sensor_msgs/msg/Image
+  gz_type_name: gz.msgs.Image
+
+- topic_name: /camera_info
+  ros_type_name: sensor_msgs/msg/CameraInfo
+  gz_type_name: gz.msgs.CameraInfo
