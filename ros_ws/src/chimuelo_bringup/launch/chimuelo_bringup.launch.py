@@ -48,11 +48,6 @@ def generate_launch_description():
 
             'approx_sync': 'false',              # Realsense --> Sincronización suave
 
-            # --- AJUSTES DE RENDIMIENTO (TFM) ---
-            # Si la Jetson se ahoga, baja esto a 1.0 o 0.5 Hz
-            #'Rtabmap/DetectionRate': '2.0',
-
-
             # --- MEMORIA ---
             # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
             #'Mem/IncrementalMemory': 'true',
@@ -70,8 +65,6 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('enable_rviz'))
     )
     
-    
-    # Construir la lista final
     ld = LaunchDescription(args)
     ld.add_action(description_launch)
     ld.add_action(sensors_launch)

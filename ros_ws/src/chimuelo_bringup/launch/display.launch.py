@@ -5,11 +5,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     pkg_dir = get_package_share_directory('chimuelo_bringup')
-    urdf_file = os.path.join(pkg_dir, 'urdf', 'prueba_chimuelo.urdf')
     rviz_config_file = os.path.join(pkg_dir, 'rviz', 'rtabmap-rviz.rviz')
-
-    with open(urdf_file, 'r') as infp:
-        robot_desc = infp.read()
 
     return LaunchDescription([
         # 1. Lanzar RViz2
