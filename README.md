@@ -1,4 +1,4 @@
-# 🚁 Chimuelo UAV - ROS2 Bringup & SLAM Architecture
+# UAV - ROS2 Bringup & SLAM Architecture
 
 ![ROS2](https://img.shields.io/badge/ROS2-Humble-34a853.svg)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420.svg)
@@ -8,7 +8,7 @@ This repository contains the core software architecture for the **"Chimuelo"** p
 
 The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin Nano companion computer, leveraging an Intel RealSense D435 for visual odometry and dense 3D mapping via RTAB-Map.
 
-## 📋 Table of Contents
+## Table of Contents
 - [System Requirements](#-system-requirements)
 - [Hardware Setup](#-hardware-setup)
 - [Repository Structure](#-repository-structure)
@@ -17,7 +17,7 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
 - [Sensor Fusion (Future Work)](#-sensor-fusion-future-work)
 - [Authors & Acknowledgments](#-authors--acknowledgments)
 
-## 💻 System Requirements
+## System Requirements
 
 - **OS:** Ubuntu 22.04 LTS (Jammy Jellyfish)
 - **Middleware:** ROS2 Humble Hawksbill
@@ -29,7 +29,7 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
   sudo apt install ros-humble-robot-localization
   sudo apt install ros-humble-xacro ros-humble-joint-state-publisher
 
-🛠 Hardware Setup
+### Hardware Setup
 
     Flight Controller: Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
 
@@ -37,7 +37,7 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
 
     Sensors: Intel RealSense D435 (RGB-D depth camera).
 
-📂 Repository Structure
+### Repository Structure
 
 The workspace is modularized within the chimuelo_bringup package to facilitate maintenance and scalability.
 Plaintext
@@ -50,29 +50,26 @@ chimuelo_bringup/
 ├── urdf/        # Kinematic description linking base_link and optical frames
 └── CMakeLists.txt & package.xml
 
-⚙️ Installation & Build
+### Installation & Build
 
-    Clone this repository into your ROS2 workspace src folder:
-    Bash
-
+    ```bash
+    #Clone this repository into your ROS2 workspace src folder:
     cd ~/ros2_ws/src
-    git clone [https://github.com/YOUR_USERNAME/chimuelo_bringup.git](https://github.com/YOUR_USERNAME/chimuelo_bringup.git)
+    git clone [https://github.com/MPV247/chimuelo_bringup.git](https://github.com/MPV247/chimuelo_bringup.git)
 
-    Install remaining dependencies using rosdep:
-    Bash
-
+    #Install remaining dependencies using rosdep:
+    
     cd ~/ros2_ws
     rosdep install --from-paths src --ignore-src -r -y
 
-    Build the package:
-    Bash
+    #Build the package:
 
     colcon build --packages-select chimuelo_bringup --symlink-install
 
-    Source the workspace:
-    Bash
+    #Source the workspace:
 
     source install/setup.bash
+    '''
 
 🚀 Usage & Launch Instructions
 
