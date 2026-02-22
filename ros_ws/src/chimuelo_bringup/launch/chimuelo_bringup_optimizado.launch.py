@@ -30,13 +30,13 @@ def generate_launch_description():
     )
 
     # B. MAVROS
-    mavros_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_mavros, 'launch', 'px4.launch')),
-        condition=IfCondition(LaunchConfiguration('enable_mavros')),
-        launch_arguments={
-            'fcu_url': '/dev/ttyTHS1:921600',
-        }.items()
-    )
+   # mavros_launch = IncludeLaunchDescription(
+   #     PythonLaunchDescriptionSource(os.path.join(pkg_mavros, 'launch', 'px4.launch')),
+   #     condition=IfCondition(LaunchConfiguration('enable_mavros')),
+   #     launch_arguments={
+   #         'fcu_url': '/dev/ttyTHS1:921600',
+   #     }.items()
+   # )
 
     # C. Sensores (Cámara)
     sensors_launch = IncludeLaunchDescription(
@@ -44,7 +44,8 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('enable_realsense')),
         launch_arguments={
             'align_depth.enable': 'true',  # Alinea el mapa de profundidad al frame de color
-            'pointcloud.enable': 'true',   # Habilita la publicación de PointCloud2
+            'pointcloud.enable': 'false',   # Habilita la publicación de PointCloud2
+            'accelerate_gpu_with_glsl': 'true'
         }.items()
     )
 
@@ -80,7 +81,7 @@ def generate_launch_description():
     # Construir la lista final
     ld = LaunchDescription(args)
     ld.add_action(description_launch)
-    ld.add_action(mavros_launch)
+   # ld.add_action(mavros_launch)
     ld.add_action(sensors_launch)
     ld.add_action(localization_launch)
 
