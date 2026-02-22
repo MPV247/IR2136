@@ -53,23 +53,19 @@ chimuelo_bringup/
 
 ## Installation & Build
 
-    ```bash
-    
+    ```
     #Clone this repository into your ROS2 workspace src folder:
     cd ~/ros2_ws/src
     git clone [https://github.com/MPV247/chimuelo_bringup.git](https://github.com/MPV247/chimuelo_bringup.git)
 
     #Install remaining dependencies using rosdep:
-    
     cd ~/ros2_ws
     rosdep install --from-paths src --ignore-src -r -y
 
     #Build the package:
-
     colcon build --packages-select chimuelo_bringup --symlink-install
 
     #Source the workspace:
-
     source install/setup.bash
     ```
     
@@ -84,7 +80,7 @@ ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
 
 2. **Modular Execution (Flags):** You can enable/disable specific modules depending on your testing needs (e.g., when playing back a rosbag):
 
-```bash
+```
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true enable_realsense:=false enable_mapping:=true
 ```
 
@@ -96,7 +92,7 @@ ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true
 
 3. **Visualization:** To visualize the real-time TF tree, point cloud, and 2D occupancy grid:
 
-```bash
+```
 ros2 launch chimuelo_bringup rviz_config.launch.py
 ```
 
