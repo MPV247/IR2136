@@ -78,7 +78,7 @@ chimuelo_bringup/
 The core logic is encapsulated in chimuelo_bringup.launch.py, which uses conditional execution logic (Launch Arguments) to toggle specific subsystems.
 1. **Main Bringup:** To launch the full system (URDF + RealSense + RTAB-Map SLAM):
 
-```bash
+```
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
 ```
 
@@ -88,11 +88,11 @@ ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true enable_realsense:=false enable_mapping:=true
 ```
 
-  **enable_description:** Launches robot_state_publisher and broadcasts the URDF TF tree.
+  * **enable_description:** Launches robot_state_publisher and broadcasts the URDF TF tree.
 
-  **enable_realsense:** Initializes the D435 camera with GPU acceleration.
+  * **enable_realsense:** Initializes the D435 camera with GPU acceleration.
 
-  **enable_mapping:** Activates RTAB-Map for visual odometry and mapping.
+  * **enable_mapping:** Activates RTAB-Map for visual odometry and mapping.
 
 3. **Visualization:** To visualize the real-time TF tree, point cloud, and 2D occupancy grid:
 
@@ -106,9 +106,9 @@ Currently, IMU-Visual fusion is handled internally by the RTAB-Map node via low-
 
 ## Authors & Acknowledgments
 
-  **Miguel Porcar:**  Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
+  * **Miguel Porcar:**  Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
 
-  **David Ballester:** Jetson Orin OS configuration, perception drivers (RealSense), and RTAB-Map SLAM tuning.
+  * **David Ballester:** Jetson Orin OS configuration, perception drivers (RealSense), and RTAB-Map SLAM tuning.
 
 *Special thanks to the UJI Robotics Team for providing the high-fidelity .STL 3D model used in the URDF visualization.*
 
