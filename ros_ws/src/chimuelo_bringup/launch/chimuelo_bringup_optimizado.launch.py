@@ -10,13 +10,11 @@ def generate_launch_description():
     pkg_chimuelo = get_package_share_directory('chimuelo_bringup')
     pkg_realsense = get_package_share_directory('realsense2_camera')
     pkg_rtabmap_launch = get_package_share_directory('rtabmap_launch')
-    pkg_mavros = get_package_share_directory('mavros')
 
     # --- 1. ARGUMENTOS DE CONTROL (FLAGS) ---
-    # Permiten al usuario decidir qué activar desde la terminal
+ 
     args = [
         DeclareLaunchArgument('enable_description', default_value='true', description='Activar robot_state_publisher'),
-        DeclareLaunchArgument('enable_mavros', default_value='true', description='Activar conexión con PX4 via MAVROS'),
         DeclareLaunchArgument('enable_realsense', default_value='true', description='Activar RealSense'),
         DeclareLaunchArgument('enable_mapping', default_value='true', description='Activar RTAB-Map'),
     ]
@@ -29,16 +27,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('enable_description'))
     )
 
-    # B. MAVROS
-   # mavros_launch = IncludeLaunchDescription(
-   #     PythonLaunchDescriptionSource(os.path.join(pkg_mavros, 'launch', 'px4.launch')),
-   #     condition=IfCondition(LaunchConfiguration('enable_mavros')),
-   #     launch_arguments={
-   #         'fcu_url': '/dev/ttyTHS1:921600',
-   #     }.items()
-   # )
-
-    # C. Sensores (Cámara)
+    # B. Sensores (Cámara)
     sensors_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_realsense, 'launch', 'rs_launch.py')),
         condition=IfCondition(LaunchConfiguration('enable_realsense')),
@@ -49,7 +38,7 @@ def generate_launch_description():
         }.items()
     )
 
-    # D. Localización 
+    # C. Localización 
     localization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_rtabmap_launch, 'launch', 'rtabmap.launch.py')),
         condition=IfCondition(LaunchConfiguration('enable_mapping')),
@@ -59,17 +48,11 @@ def generate_launch_description():
 
             'approx_sync': 'false',              # Realsense --> Sincronización suave
 
-            # --- AJUSTES DE RENDIMIENTO (TFM) ---
-            # Si la Jetson se ahoga, baja esto a 1.0 o 0.5 Hz
-            #'Rtabmap/DetectionRate': '2.0',
-
             #IMU PX4-Mav/ROS: 
             'imu_topic': '/mavros/imu/data',      
             'wait_imu_to_init': 'true',           
-            # --- MEMORIA ---
-            # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
-            #'Mem/IncrementalMemory': 'true',
-            #'Mem/InitWMWithAllNodes': 'true',
+            
+            #Camara Realsense D435: 
             'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
             'rgb_topic' : '/camera/camera/color/image_raw',
             'camera_info_topic' : '/camera/camera/color/camera_info',
@@ -85,7 +68,6 @@ def generate_launch_description():
     # Construir la lista final
     ld = LaunchDescription(args)
     ld.add_action(description_launch)
-   # ld.add_action(mavros_launch)
     ld.add_action(sensors_launch)
     ld.add_action(localization_launch)
 
