@@ -19,7 +19,6 @@ def generate_launch_description():
         DeclareLaunchArgument('enable_mavros', default_value='true', description='Activar conexión con PX4 via MAVROS'),
         DeclareLaunchArgument('enable_realsense', default_value='true', description='Activar RealSense'),
         DeclareLaunchArgument('enable_mapping', default_value='true', description='Activar RTAB-Map'),
-        DeclareLaunchArgument('enable_rviz', default_value='true', description='Abrir RViz'),
     ]
 
     # --- 2. INCLUIR LOS SUB-LAUNCHES CON CONDICIONES ---
@@ -49,27 +48,23 @@ def generate_launch_description():
         }.items()
     )
 
-    # D. Localización 
-    localization_launch = IncludeLaunchDescription(
+    # D. Mapeo 
+    mapping_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_rtabmap_launch, 'launch', 'rtabmap.launch.py')),
         condition=IfCondition(LaunchConfiguration('enable_mapping')),
         launch_arguments={
-            'frame_id': 'base_link',          # Robot
-            'args': '--delete_db_on_start', 
+            'frame_id': 'base_link',
+            'args': '--delete_db_on_start',
+            
+            # --- APAGAR GUIs ---
+            'rtabmap_viz': 'false', 
+            'rviz': 'false',        
 
-            'approx_sync': 'false',              # Realsense --> Sincronización suave
-
-            # --- AJUSTES DE RENDIMIENTO (TFM) ---
-            # Si la Jetson se ahoga, baja esto a 1.0 o 0.5 Hz
-            #'Rtabmap/DetectionRate': '2.0',
-
-            #IMU PX4-Mav/ROS: 
-            'imu_topic': '/mavros/imu/data',      
-            'wait_imu_to_init': 'true',           
-            # --- MEMORIA ---
-            # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
-            #'Mem/IncrementalMemory': 'true',
-            #'Mem/InitWMWithAllNodes': 'true',
+            # --- OPTIMIZACIÓN: DECIMACIÓN DE IMÁGENES ---
+            'Grid/DepthDecimation': '4',       # Reduce la resolución del mapa 3D (1 de cada 4 píxeles)
+            'Mem/ImagePreDecimation': '2',     # Reduce la imagen RGB+Depth general a la mitad antes de procesarla
+            
+            # --- TOPICOS ---
             'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
             'rgb_topic' : '/camera/camera/color/image_raw',
             'camera_info_topic' : '/camera/camera/color/camera_info'
@@ -77,19 +72,12 @@ def generate_launch_description():
         }.items()
     )
 
-    # E. Visualización
-    visualization_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_chimuelo, 'launch', 'display.launch.py')),
-        condition=IfCondition(LaunchConfiguration('enable_rviz'))
-    )
-    
     
     # Construir la lista final
     ld = LaunchDescription(args)
     ld.add_action(description_launch)
     ld.add_action(mavros_launch)
     ld.add_action(sensors_launch)
-    ld.add_action(localization_launch)
-    ld.add_action(visualization_launch)
+    ld.add_action(mapping_launch)
 
     return ld
