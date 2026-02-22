@@ -72,7 +72,11 @@ def generate_launch_description():
             #'Mem/InitWMWithAllNodes': 'true',
             'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
             'rgb_topic' : '/camera/camera/color/image_raw',
-            'camera_info_topic' : '/camera/camera/color/camera_info'
+            'camera_info_topic' : '/camera/camera/color/camera_info',
+
+           # --------- Optimización ----------
+           'Rtabmap/DetectionRate': '1.0',
+           'Grid/DepthDecimation': '4'
             
         }.items()
     )
