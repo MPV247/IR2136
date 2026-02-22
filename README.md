@@ -77,19 +77,17 @@ chimuelo_bringup/
 ## Usage & Launch Instructions
 
 The core logic is encapsulated in chimuelo_bringup.launch.py, which uses conditional execution logic (Launch Arguments) to toggle specific subsystems.
-1. Main Bringup
+1. **Main Bringup:** To launch the full system (URDF + RealSense + RTAB-Map SLAM):
 
-To launch the full system (URDF + RealSense + RTAB-Map SLAM):
-
-
+```bash
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
+```
 
-2. Modular Execution (Flags)
+2. **Modular Execution (Flags):** You can enable/disable specific modules depending on your testing needs (e.g., when playing back a rosbag):
 
-You can enable/disable specific modules depending on your testing needs (e.g., when playing back a rosbag):
-Bash
-
+```bash
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true enable_realsense:=false enable_mapping:=true
+```
 
     enable_description: Launches robot_state_publisher and broadcasts the URDF TF tree.
 
@@ -97,22 +95,22 @@ ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true
 
     enable_mapping: Activates RTAB-Map for visual odometry and mapping.
 
-3. Visualization
+3. **Visualization:** To visualize the real-time TF tree, point cloud, and 2D occupancy grid:
 
-To visualize the real-time TF tree, point cloud, and 2D occupancy grid:
-Bash
-
+```bash
 ros2 launch chimuelo_bringup rviz_config.launch.py
+```
 
-🔀 Sensor Fusion (Future Work)
+## Sensor Fusion (Future Work)
 
-Currently, IMU-Visual fusion is handled internally by the RTAB-Map node via low-latency synchronization with the /mavros/imu/data topic. However, a fully configured Extended Kalman Filter (EKF) using robot_localization is available in the config/ekf_params.yaml file to support future integrations (e.g., external LiDAR, UWB).
-👥 Authors & Acknowledgments
+Currently, IMU-Visual fusion is handled internally by the RTAB-Map node via low-latency synchronization with the **/mavros/imu/data topic**. However, a fully configured **Extended Kalman Filter (EKF)** using robot_localization is available in the config/ekf_params.yaml file to support future integrations (e.g., external LiDAR, UWB).
 
-    Miguel Porcar: Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
+## Authors & Acknowledgments
+
+    Miguel Porcar:  Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
 
     David Ballester: Jetson Orin OS configuration, perception drivers (RealSense), and RTAB-Map SLAM tuning.
 
-Special thanks to the UJI Robotics Team for providing the high-fidelity .STL 3D model used in the URDF visualization.
+*Special thanks to the UJI Robotics Team for providing the high-fidelity .STL 3D model used in the URDF visualization.*
 
 
