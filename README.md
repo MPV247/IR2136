@@ -1,8 +1,8 @@
 # UAV - ROS2 Bringup & SLAM Architecture
 
-![ROS2](https://img.shields.io/badge/ROS2-Humble-34a853.svg)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420.svg)
-![Hardware](https://img.shields.io/badge/Hardware-Jetson_Orin_Nano-76B900.svg)
+![ROS2](https://docs.ros.org/en/humble/index.html)
+![Ubuntu](https://ubuntu.com/blog/tag/22-04-lts)
+![Hardware](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard)
 
 This repository contains the core software architecture for the **"Chimuelo"** platform, a custom multirotor UAV designed for autonomous navigation and 3D mapping in GPS-denied environments. 
 
