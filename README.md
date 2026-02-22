@@ -1,8 +1,7 @@
 # UAV - ROS2 Bringup & SLAM Architecture
-
-![ROS2](https://docs.ros.org/en/humble/index.html)
-![Ubuntu](https://ubuntu.com/blog/tag/22-04-lts)
-![Hardware](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard)
+[![ROS2](https://img.shields.io/badge/ROS2-Humble-34a853.svg?logo=ros)](https://docs.ros.org/en/humble/index.html)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420.svg?logo=ubuntu)](https://ubuntu.com/blog/tag/22-04-lts)
+[![Hardware](https://img.shields.io/badge/Hardware-Jetson_Orin_Nano-76B900.svg?logo=nvidia)](https://docs.px4.io/main/en/companion_computer/holybro_pixhawk_jetson_baseboard)
 
 This repository contains the core software architecture for the **"Chimuelo"** platform, a custom multirotor UAV designed for autonomous navigation and 3D mapping in GPS-denied environments. 
 
@@ -20,7 +19,7 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
 ## System Requirements
 
 - **OS:** Ubuntu 22.04 LTS (Jammy Jellyfish)
-- **Middleware:** ROS2 Humble Hawksbill
+- **Middleware:** ROS2 Humble Hawksbill, 
 - **Core Dependencies:**
   ```bash
   sudo apt install ros-humble-mavros ros-humble-mavros-extras
@@ -28,14 +27,14 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
   sudo apt install ros-humble-realsense2-camera
   sudo apt install ros-humble-robot-localization
   sudo apt install ros-humble-xacro ros-humble-joint-state-publisher
-
+ 
 ## Hardware Setup
 
-    Flight Controller: Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
+  Flight Controller: Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
 
-    Companion Computer: NVIDIA Jetson Orin Nano (handles heavy SLAM computation and hardware interfacing).
+  Companion Computer: NVIDIA Jetson Orin Nano (handles heavy SLAM computation and hardware interfacing).
 
-    Sensors: Intel RealSense D435 (RGB-D depth camera).
+  Sensors: Intel RealSense D435 (RGB-D depth camera).
 
 ## Repository Structure
 
