@@ -30,11 +30,11 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
  
 ## Hardware Setup
 
-  Flight Controller: Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
+* **Flight Controller:** Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
 
-  Companion Computer: NVIDIA Jetson Orin Nano (handles heavy SLAM computation and hardware interfacing).
+* **Companion Computer:** NVIDIA Jetson Orin Nano (handles heavy SLAM computation and hardware interfacing).
 
-  Sensors: Intel RealSense D435 (RGB-D depth camera).
+* **External sensors:** Intel RealSense D435 (RGB-D depth camera).
 
 ## Repository Structure
 
@@ -88,11 +88,11 @@ ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py enable_description:=true enable_realsense:=false enable_mapping:=true
 ```
 
-    enable_description: Launches robot_state_publisher and broadcasts the URDF TF tree.
+  **enable_description:** Launches robot_state_publisher and broadcasts the URDF TF tree.
 
-    enable_realsense: Initializes the D435 camera with GPU acceleration.
+  **enable_realsense:** Initializes the D435 camera with GPU acceleration.
 
-    enable_mapping: Activates RTAB-Map for visual odometry and mapping.
+  **enable_mapping:** Activates RTAB-Map for visual odometry and mapping.
 
 3. **Visualization:** To visualize the real-time TF tree, point cloud, and 2D occupancy grid:
 
@@ -106,9 +106,9 @@ Currently, IMU-Visual fusion is handled internally by the RTAB-Map node via low-
 
 ## Authors & Acknowledgments
 
-    Miguel Porcar:  Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
+  **Miguel Porcar:**  Kinematic modeling, URDF design, TF tree logic, and EKF configuration.
 
-    David Ballester: Jetson Orin OS configuration, perception drivers (RealSense), and RTAB-Map SLAM tuning.
+  **David Ballester:** Jetson Orin OS configuration, perception drivers (RealSense), and RTAB-Map SLAM tuning.
 
 *Special thanks to the UJI Robotics Team for providing the high-fidelity .STL 3D model used in the URDF visualization.*
 
