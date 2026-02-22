@@ -29,7 +29,7 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
   sudo apt install ros-humble-robot-localization
   sudo apt install ros-humble-xacro ros-humble-joint-state-publisher
 
-### Hardware Setup
+## Hardware Setup
 
     Flight Controller: Holybro 500x Frame with Pixhawk (running PX4 Autopilot).
 
@@ -37,22 +37,25 @@ The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin N
 
     Sensors: Intel RealSense D435 (RGB-D depth camera).
 
-### Repository Structure
+## Repository Structure
 
-The workspace is modularized within the chimuelo_bringup package to facilitate maintenance and scalability.
-Plaintext
+The workspace is modularized within the `chimuelo_bringup` package to facilitate maintenance and scalability:
 
+```text
 chimuelo_bringup/
-├── config/      # EKF parameters for future sensor fusion (robot_localization)
-├── launch/      # Modular Python launch scripts (bringup, transforms, rviz)
-├── meshes/      # 3D STL model for visualization
-├── rviz/        # Pre-configured RViz profiles for mapping and TF debugging
-├── urdf/        # Kinematic description linking base_link and optical frames
-└── CMakeLists.txt & package.xml
+├── config/          # EKF parameters for future sensor fusion (robot_localization)
+├── launch/          # Modular Python launch scripts (bringup, transforms, rviz)
+├── meshes/          # 3D STL model for visualization
+├── rviz/            # Pre-configured RViz profiles for mapping and TF debugging
+├── urdf/            # Kinematic description linking base_link and optical frames
+├── CMakeLists.txt   # Build configuration
+└── package.xml      # Package metadata and dependencies
+```
 
-### Installation & Build
+## Installation & Build
 
     ```bash
+    
     #Clone this repository into your ROS2 workspace src folder:
     cd ~/ros2_ws/src
     git clone [https://github.com/MPV247/chimuelo_bringup.git](https://github.com/MPV247/chimuelo_bringup.git)
@@ -69,15 +72,15 @@ chimuelo_bringup/
     #Source the workspace:
 
     source install/setup.bash
-    '''
-
-🚀 Usage & Launch Instructions
+    ```
+    
+## Usage & Launch Instructions
 
 The core logic is encapsulated in chimuelo_bringup.launch.py, which uses conditional execution logic (Launch Arguments) to toggle specific subsystems.
 1. Main Bringup
 
 To launch the full system (URDF + RealSense + RTAB-Map SLAM):
-Bash
+
 
 ros2 launch chimuelo_bringup chimuelo_bringup.launch.py
 
