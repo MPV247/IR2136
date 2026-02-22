@@ -8,13 +8,13 @@ This repository contains the core software architecture for the **"Chimuelo"** p
 The system integrates a PX4-based flight controller with an NVIDIA Jetson Orin Nano companion computer, leveraging an Intel RealSense D435 for visual odometry and dense 3D mapping via RTAB-Map.
 
 ## Table of Contents
-- [System Requirements](#-system-requirements)
-- [Hardware Setup](#-hardware-setup)
-- [Repository Structure](#-repository-structure)
-- [Installation & Build](#-installation--build)
-- [Usage & Launch Instructions](#-usage--launch-instructions)
-- [Sensor Fusion (Future Work)](#-sensor-fusion-future-work)
-- [Authors & Acknowledgments](#-authors--acknowledgments)
+- [System Requirements](#system-requirements)
+- [Hardware Setup](#hardware-setup)
+- [Repository Structure](#repository-structure)
+- [Installation & Build](#installation--build)
+- [Usage & Launch Instructions](#usage--launch-instructions)
+- [Sensor Fusion (Future Work)](#sensor-fusion-future-work)
+- [Authors & Acknowledgments](#authors--acknowledgments)
 
 ## System Requirements
 
