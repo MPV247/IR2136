@@ -48,23 +48,27 @@ def generate_launch_description():
         }.items()
     )
 
-    # D. Mapeo 
-    mapping_launch = IncludeLaunchDescription(
+    # D. Localización 
+    localization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_rtabmap_launch, 'launch', 'rtabmap.launch.py')),
         condition=IfCondition(LaunchConfiguration('enable_mapping')),
         launch_arguments={
-            'frame_id': 'base_link',
-            'args': '--delete_db_on_start',
-            
-            # --- APAGAR GUIs ---
-            'rtabmap_viz': 'false', 
-            'rviz': 'false',        
+            'frame_id': 'base_link',          # Robot
+            'args': '--delete_db_on_start', 
 
-            # --- OPTIMIZACIÓN: DECIMACIÓN DE IMÁGENES ---
-            'Grid/DepthDecimation': '4',       # Reduce la resolución del mapa 3D (1 de cada 4 píxeles)
-            'Mem/ImagePreDecimation': '2',     # Reduce la imagen RGB+Depth general a la mitad antes de procesarla
-            
-            # --- TOPICOS ---
+            'approx_sync': 'false',              # Realsense --> Sincronización suave
+
+            # --- AJUSTES DE RENDIMIENTO (TFM) ---
+            # Si la Jetson se ahoga, baja esto a 1.0 o 0.5 Hz
+            #'Rtabmap/DetectionRate': '2.0',
+
+            #IMU PX4-Mav/ROS: 
+            'imu_topic': '/mavros/imu/data',      
+            'wait_imu_to_init': 'true',           
+            # --- MEMORIA ---
+            # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
+            #'Mem/IncrementalMemory': 'true',
+            #'Mem/InitWMWithAllNodes': 'true',
             'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
             'rgb_topic' : '/camera/camera/color/image_raw',
             'camera_info_topic' : '/camera/camera/color/camera_info'
@@ -78,6 +82,7 @@ def generate_launch_description():
     ld.add_action(description_launch)
     ld.add_action(mavros_launch)
     ld.add_action(sensors_launch)
-    ld.add_action(mapping_launch)
+    ld.add_action(localization_launch)
+
 
     return ld
