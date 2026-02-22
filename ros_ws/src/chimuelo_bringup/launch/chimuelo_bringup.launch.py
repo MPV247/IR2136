@@ -12,12 +12,11 @@ def generate_launch_description():
     pkg_rtabmap_launch = get_package_share_directory('rtabmap_launch')
 
     # --- 1. ARGUMENTOS DE CONTROL (FLAGS) ---
-    # Permiten al usuario decidir qué activar desde la terminal
+ 
     args = [
         DeclareLaunchArgument('enable_description', default_value='true', description='Activar robot_state_publisher'),
         DeclareLaunchArgument('enable_realsense', default_value='true', description='Activar RealSense'),
         DeclareLaunchArgument('enable_mapping', default_value='true', description='Activar RTAB-Map'),
-        DeclareLaunchArgument('enable_rviz', default_value='true', description='Abrir RViz'),
     ]
 
     # --- 2. INCLUIR LOS SUB-LAUNCHES CON CONDICIONES ---
@@ -34,7 +33,8 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('enable_realsense')),
         launch_arguments={
             'align_depth.enable': 'true',  # Alinea el mapa de profundidad al frame de color
-            'pointcloud.enable': 'true',   # Habilita la publicación de PointCloud2
+            'pointcloud.enable': 'false',   # POintcloud lo dejamos a Rtabmap (optimización)
+            'accelerate_gpu_with_glsl': 'true' #Aceleracion por GPU
         }.items()
     )
 
@@ -48,27 +48,28 @@ def generate_launch_description():
 
             'approx_sync': 'false',              # Realsense --> Sincronización suave
 
-            # --- MEMORIA ---
-            # Guardar el mapa en disco para verlo luego (rtabmap-databaseViewer)
-            #'Mem/IncrementalMemory': 'true',
-            #'Mem/InitWMWithAllNodes': 'true',
+            #IMU PX4-Mav/ROS: 
+            'imu_topic': '/mavros/imu/data',      
+            'wait_imu_to_init': 'true',           
+            
+            #Camara Realsense D435: 
             'depth_topic' : '/camera/camera/aligned_depth_to_color/image_raw',
             'rgb_topic' : '/camera/camera/color/image_raw',
-            'camera_info_topic' : '/camera/camera/color/camera_info'
+            'camera_info_topic' : '/camera/camera/color/camera_info',
+
+           # --------- Optimización ----------
+           'Rtabmap/DetectionRate': '1.0',
+           'Grid/DepthDecimation': '4'
             
         }.items()
     )
 
-    # D. Visualización
-    visualization_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_chimuelo, 'launch', 'display.launch.py')),
-        condition=IfCondition(LaunchConfiguration('enable_rviz'))
-    )
     
+    # Construir la lista final
     ld = LaunchDescription(args)
     ld.add_action(description_launch)
     ld.add_action(sensors_launch)
     ld.add_action(localization_launch)
-    ld.add_action(visualization_launch)
+
 
     return ld

@@ -5,7 +5,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     pkg_dir = get_package_share_directory('chimuelo_bringup')
-    urdf_file = os.path.join(pkg_dir, 'urdf', 'prueba_chimuelo.urdf')
+    urdf_file = os.path.join(pkg_dir, 'urdf', 'chimuelo.urdf')
 
     with open(urdf_file, 'r') as infp:
         robot_desc = infp.read()
